@@ -86,6 +86,9 @@ fun HomeScreen() {
         isVisible = state.isAddGameScreenOpen,
         onBackPressed = {
             viewModel.hideAddGameScreen()
+        },
+        onGameSaved = { gameTitle ->
+            viewModel.addGame(gameTitle)
         }
     )
 }

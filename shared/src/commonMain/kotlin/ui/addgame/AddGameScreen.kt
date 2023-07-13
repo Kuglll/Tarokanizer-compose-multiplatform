@@ -39,6 +39,7 @@ const val SIXTH_PLAYER = 5
 fun AddGameScreen(
     isVisible: Boolean,
     onBackPressed: () -> Unit,
+    onGameSaved: (String) -> Unit,
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
     val numberOfPlayersSelected = remember { mutableStateOf(2) }
@@ -124,6 +125,14 @@ fun AddGameScreen(
                     },
                     labelText = "Player ${playerIndex + 1}"
                 )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = {
+                onGameSaved(gameTitle.value)
+            }){
+                Text("Create game")
             }
 
             if (isNumberOfPlayersSelectionVisible.value) {

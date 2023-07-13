@@ -27,7 +27,7 @@ class HomeScreenViewModel : ViewModel() {
         updatedGames.add(game)
 
         _state.update {
-            it.copy(games = updatedGames)
+            it.copy(games = updatedGames, isAddGameScreenOpen = false)
         }
     }
 
