@@ -83,36 +83,38 @@ fun NumberOfPlayersPopup(
     Popup(
         alignment = Alignment.Center
     ) {
-        Surface(
-            modifier = Modifier,
-            color = Color.LightGray,
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Column(modifier = Modifier.padding(16.dp).padding(horizontal = 24.dp)) {
-                Text(text = "2 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(2)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "3 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(3)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "4 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(4)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "5 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(5)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "6 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(6)
-                    onDismiss()
-                })
+        Box(modifier = Modifier.background(color = transparent_40).fillMaxSize(), contentAlignment = Alignment.Center) {
+            Surface(
+                modifier = Modifier,
+                color = Color.White,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp).padding(horizontal = 24.dp)) {
+                    Text(text = "2 Players", modifier = Modifier.clickable {
+                        onNumberOfPlayersChanged(2)
+                        onDismiss()
+                    })
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "3 Players", modifier = Modifier.clickable {
+                        onNumberOfPlayersChanged(3)
+                        onDismiss()
+                    })
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "4 Players", modifier = Modifier.clickable {
+                        onNumberOfPlayersChanged(4)
+                        onDismiss()
+                    })
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "5 Players", modifier = Modifier.clickable {
+                        onNumberOfPlayersChanged(5)
+                        onDismiss()
+                    })
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "6 Players", modifier = Modifier.clickable {
+                        onNumberOfPlayersChanged(6)
+                        onDismiss()
+                    })
+                }
             }
         }
     }
