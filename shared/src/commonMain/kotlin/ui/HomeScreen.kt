@@ -16,19 +16,28 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun HomeScreen() {
 
-    val games = remember { mutableStateListOf<String>() }
+    val viewModel = getViewModel(
+        key = "home-screen",
+        factory = viewModelFactory {
+            HomeScreenViewModel()
+        }
+    )
+
+    val state by viewModel.state.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -51,12 +60,13 @@ fun HomeScreen() {
                 imageVector = Icons.Default.Add,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp).clickable {
-                    games.add("Game ${games.size + 1}")
+                    viewModel.addGame("Gamee")
+                    //TODO: Open "Add game screen"
                 }
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        games.forEach {
+        state.games.forEach {
             HomeScreenItem(it)
             Spacer(modifier = Modifier.height(16.dp))
         }

@@ -8,6 +8,12 @@ plugins {
 kotlin {
     android()
 
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
+        binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
+            export("dev.icerock.moko:mvvm-core:0.16.1")
+        }
+    }
+
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -73,4 +79,12 @@ android {
     kotlin {
         jvmToolchain(11)
     }
+}
+
+dependencies {
+    implementation("androidx.core:core:1.10.1")
+    commonMainApi("dev.icerock.moko:mvvm-core:0.16.1")
+    commonMainApi("dev.icerock.moko:mvvm-compose:0.16.1")
+    commonMainApi("dev.icerock.moko:mvvm-flow:0.16.1")
+    commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1")
 }
