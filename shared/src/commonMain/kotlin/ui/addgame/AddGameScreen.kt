@@ -28,6 +28,13 @@ import androidx.compose.ui.window.Popup
 
 const val DEFAULT_ANIMATION_DURATION = 300
 
+const val FIRST_PLAYER = 0
+const val SECOND_PLAYER = 1
+const val THIRD_PLAYER = 2
+const val FOURTH_PLAYER = 3
+const val FIFTH_PLAYER = 4
+const val SIXTH_PLAYER = 5
+
 @Composable
 fun AddGameScreen(
     isVisible: Boolean,
@@ -36,6 +43,13 @@ fun AddGameScreen(
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
     val numberOfPlayersSelected = remember { mutableStateOf(2) }
     val gameTitle = remember { mutableStateOf("") }
+
+    val player1Name = remember { mutableStateOf("") }
+    val player2Name = remember { mutableStateOf("") }
+    val player3Name = remember { mutableStateOf("") }
+    val player4Name = remember { mutableStateOf("") }
+    val player5Name = remember { mutableStateOf("") }
+    val player6Name = remember { mutableStateOf("") }
 
     AnimatedVisibility(
         visible = isVisible,
@@ -72,6 +86,44 @@ fun AddGameScreen(
 
             Button(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
                 Text("Number of players: ${numberOfPlayersSelected.value}")
+            }
+
+            (0 until numberOfPlayersSelected.value).forEach { playerIndex ->
+                TarokanizerTextField(
+                    value = when (playerIndex) {
+                        FIRST_PLAYER -> player1Name.value
+                        SECOND_PLAYER -> player2Name.value
+                        THIRD_PLAYER -> player3Name.value
+                        FOURTH_PLAYER -> player4Name.value
+                        FIFTH_PLAYER -> player5Name.value
+                        SIXTH_PLAYER -> player6Name.value
+                        else -> ""
+                    },
+                    onValueChange = when (playerIndex) {
+                        FIRST_PLAYER -> {
+                            { player1Name.value = it }
+                        }
+                        SECOND_PLAYER -> {
+                            { player2Name.value = it }
+                        }
+                        THIRD_PLAYER -> {
+                            { player3Name.value = it }
+                        }
+                        FOURTH_PLAYER -> {
+                            { player4Name.value = it }
+                        }
+                        FIFTH_PLAYER -> {
+                            { player5Name.value = it }
+                        }
+                        SIXTH_PLAYER -> {
+                            { player6Name.value = it }
+                        }
+                        else -> {
+                            {}
+                        }
+                    },
+                    labelText = "Player ${playerIndex + 1}"
+                )
             }
 
             if (isNumberOfPlayersSelectionVisible.value) {
