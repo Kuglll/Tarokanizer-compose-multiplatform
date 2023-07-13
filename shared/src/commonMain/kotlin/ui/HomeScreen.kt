@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,38 +41,53 @@ fun HomeScreen() {
 
     val state by viewModel.state.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Row(
-            modifier = Modifier
-                .background(Color.LightGray)
-                .defaultMinSize(minHeight = 64.dp)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Tarokanizer",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                modifier = Modifier.size(40.dp).clickable {
-                    viewModel.addGame("Gamee")
-                    //TODO: Open "Add game screen"
-                }
-            )
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.openAddGameScreen()
+                },
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.AddCircle,
+                    contentDescription = "Add game",
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        state.games.forEach {
-            HomeScreenItem(it)
-            Spacer(modifier = Modifier.height(16.dp))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
+                    .defaultMinSize(minHeight = 64.dp)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Tarokanizer",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            state.games.forEach {
+                HomeScreenItem(it)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
+
+    AddGameScreen(
+        isVisible = state.isAddGameScreenOpen,
+        onBackPressed = {
+            viewModel.hideAddGameScreen()
+        }
+    )
 }
 
 @Composable

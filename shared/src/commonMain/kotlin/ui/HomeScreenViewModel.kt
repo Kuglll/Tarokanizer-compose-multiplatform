@@ -10,6 +10,18 @@ class HomeScreenViewModel : ViewModel() {
 
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), HomeScreenState())
 
+    fun openAddGameScreen(){
+        _state.update {
+            it.copy(isAddGameScreenOpen = true)
+        }
+    }
+
+    fun hideAddGameScreen(){
+        _state.update {
+            it.copy(isAddGameScreenOpen = false)
+        }
+    }
+
     fun addGame(game: String) {
         val updatedGames = _state.value.games.toMutableList()
         updatedGames.add(game)
