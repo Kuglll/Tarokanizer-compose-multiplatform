@@ -4,16 +4,17 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ fun AddGameScreen(
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
     val numberOfPlayersSelected = remember { mutableStateOf(2) }
+    val gameTitle = remember { mutableStateOf("") }
 
     AnimatedVisibility(
         visible = isVisible,
@@ -56,8 +58,19 @@ fun AddGameScreen(
                     onBackPressed()
                 }
             )
+            Spacer(modifier = Modifier.height(8.dp))
 
-            TextButton(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
+            TarokanizerTextField(
+                value = gameTitle.value,
+                onValueChange = {
+                    gameTitle.value = it
+                },
+                labelText = "Title",
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
                 Text("Number of players: ${numberOfPlayersSelected.value}")
             }
 
