@@ -1,4 +1,4 @@
-rootProject.name = "MyApplication"
+rootProject.name = "Tarokanizer"
 
 include(":androidApp")
 include(":shared")
