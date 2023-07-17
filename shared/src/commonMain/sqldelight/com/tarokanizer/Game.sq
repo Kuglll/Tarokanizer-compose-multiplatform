@@ -1,0 +1,12 @@
+CREATE TABLE GameEntity (
+  id INTEGER NOT NULL,
+  title TEXT NOT NULL
+);
+
+selectAllGames:
+SELECT *
+FROM GameEntity;
+
+insertGame:
+INSERT INTO GameEntity(id, title)
+VALUES ?;

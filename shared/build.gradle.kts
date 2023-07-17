@@ -3,6 +3,7 @@ plugins {
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("app.cash.sqldelight") version "2.0.0-rc02"
 }
 
 kotlin {
@@ -14,9 +15,16 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
 
     cocoapods {
         version = "1.0.0"
@@ -46,6 +54,7 @@ kotlin {
                 api("androidx.activity:activity-compose:1.6.1")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.9.0")
+                implementation("app.cash.sqldelight:android-driver:2.0.0-rc02")
             }
         }
         val iosX64Main by getting
@@ -56,6 +65,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation("app.cash.sqldelight:native-driver:2.0.0-rc02")
+            }
         }
     }
 }
@@ -87,4 +99,13 @@ dependencies {
     commonMainApi("dev.icerock.moko:mvvm-compose:0.16.1")
     commonMainApi("dev.icerock.moko:mvvm-flow:0.16.1")
     commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1")
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.tarokanizer")
+        }
+        linkSqlite.set(false)
+    }
 }

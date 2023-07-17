@@ -4,10 +4,12 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun App() {
+fun App(
+    appModule: AppModule
+) {
     MaterialTheme {
 
-        HomeScreen()
+        HomeScreen(appModule)
 
 //        var greetingText by remember { mutableStateOf("Hello, World!") }
 //        var showImage by remember { mutableStateOf(false) }

@@ -30,12 +30,12 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(appModule: AppModule) {
 
     val viewModel = getViewModel(
         key = "home-screen",
         factory = viewModelFactory {
-            HomeScreenViewModel()
+            HomeScreenViewModel(appModule.gameDataSource)
         }
     )
 
