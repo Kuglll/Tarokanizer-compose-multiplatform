@@ -14,12 +14,15 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -77,7 +80,12 @@ fun HomeScreen(appModule: AppModule) {
             }
             Spacer(modifier = Modifier.height(24.dp))
             state.games.forEach {
-                HomeScreenItem(it.title)
+                HomeScreenItem(
+                    game = it,
+                    onDeleteClicked = { id ->
+                        viewModel.deleteGame(id)
+                    }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -96,8 +104,12 @@ fun HomeScreen(appModule: AppModule) {
 
 @Composable
 fun HomeScreenItem(
-    title: String
+    game: Game,
+    onDeleteClicked: (Long) -> Unit,
 ) {
+
+    val isDeleteDialogShown = remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = Color.LightGray,
@@ -108,7 +120,7 @@ fun HomeScreenItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = title,
+                text = game.title,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -117,9 +129,51 @@ fun HomeScreenItem(
                 imageVector = Icons.Default.Delete,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp).clickable {
-                    // TODO: Implement delete
+                    isDeleteDialogShown.value = true
                 }
             )
         }
     }
+
+    if (isDeleteDialogShown.value) {
+        AreYouSureYouWantToDeleteDialog(
+            gameTitle = game.title,
+            onDismiss = { isDeleteDialogShown.value = false },
+            onConfirm = {
+                onDeleteClicked(game.id)
+            }
+        )
+    }
+}
+
+@Composable
+fun AreYouSureYouWantToDeleteDialog(
+    gameTitle: String,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    Dialog(
+        onDismiss = onDismiss,
+        content = {
+            Column {
+                Text(
+                    text = "Are you sure you want to delete game: $gameTitle",
+                    modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                )
+                Row {
+                    Modifier.weight(1f)
+                    TextButton(
+                        onClick = onDismiss
+                    ) {
+                        Text("No")
+                    }
+                    TextButton(
+                        onClick = onConfirm
+                    ) {
+                        Text("Yes")
+                    }
+                }
+            }
+        }
+    )
 }

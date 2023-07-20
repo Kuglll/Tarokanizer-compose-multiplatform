@@ -10,3 +10,7 @@ FROM GameEntity;
 insertGame:
 INSERT INTO GameEntity(id, title)
 VALUES ?;
+
+deleteGameById:
+DELETE FROM GameEntity
+WHERE id = :id;

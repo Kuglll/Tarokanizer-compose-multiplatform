@@ -45,4 +45,13 @@ class HomeScreenViewModel(
         }
     }
 
+    fun deleteGame(id: Long){
+        viewModelScope.launch {
+            gameDataSource.deleteGameById(id)
+            _state.update {
+                it.copy(games = gameDataSource.getGames())
+            }
+        }
+    }
+
 }
