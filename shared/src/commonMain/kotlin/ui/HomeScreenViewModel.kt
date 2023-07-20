@@ -1,6 +1,6 @@
 package ui
 
-import Game
+import data.Game
 import GameDataSource
 import HomeScreenState
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -36,9 +36,9 @@ class HomeScreenViewModel(
         }
     }
 
-    fun addGame(gameTitle: String) {
+    fun addGame(game: Game) {
         viewModelScope.launch {
-            gameDataSource.storeGame(Game(_state.value.games.size.toLong(), gameTitle))
+            gameDataSource.storeGame(Game(_state.value.games.size.toLong(), game.title, game.players))
             _state.update {
                 it.copy(games = gameDataSource.getGames(), isAddGameScreenOpen = false)
             }
@@ -52,6 +52,10 @@ class HomeScreenViewModel(
                 it.copy(games = gameDataSource.getGames())
             }
         }
+    }
+
+    fun showGameDetails(id: Long){
+        //TODO: Implement
     }
 
 }

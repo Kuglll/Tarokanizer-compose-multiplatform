@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import ui.HomeScreenViewModel
@@ -84,6 +85,9 @@ fun HomeScreen(appModule: AppModule) {
                     game = it,
                     onDeleteClicked = { id ->
                         viewModel.deleteGame(id)
+                    },
+                    onGameClicked = { id ->
+                        viewModel.showGameDetails(id)
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -96,8 +100,8 @@ fun HomeScreen(appModule: AppModule) {
         onBackPressed = {
             viewModel.hideAddGameScreen()
         },
-        onGameSaved = { gameTitle ->
-            viewModel.addGame(gameTitle)
+        onGameSaved = { game ->
+            viewModel.addGame(game)
         }
     )
 }
@@ -106,6 +110,7 @@ fun HomeScreen(appModule: AppModule) {
 fun HomeScreenItem(
     game: Game,
     onDeleteClicked: (Long) -> Unit,
+    onGameClicked: (Long) -> Unit
 ) {
 
     val isDeleteDialogShown = remember { mutableStateOf(false) }
@@ -113,7 +118,9 @@ fun HomeScreenItem(
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = Color.LightGray,
-        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().defaultMinSize(minHeight = 56.dp)
+        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().defaultMinSize(minHeight = 56.dp).clickable {
+            onGameClicked(game.id)
+        }
     ) {
         Row(
             modifier = Modifier.padding(16.dp),

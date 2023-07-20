@@ -4,27 +4,24 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
+import data.Game
+import data.Player
 
 const val DEFAULT_ANIMATION_DURATION = 300
 
@@ -39,11 +36,13 @@ const val SIXTH_PLAYER = 5
 fun AddGameScreen(
     isVisible: Boolean,
     onBackPressed: () -> Unit,
-    onGameSaved: (String) -> Unit,
+    onGameSaved: (Game) -> Unit,
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
     val numberOfPlayersSelected = remember { mutableStateOf(2) }
     val gameTitle = remember { mutableStateOf("") }
+
+    //TODO: Implement state clearing
 
     val player1Name = remember { mutableStateOf("") }
     val player2Name = remember { mutableStateOf("") }
@@ -104,21 +103,27 @@ fun AddGameScreen(
                         FIRST_PLAYER -> {
                             { player1Name.value = it }
                         }
+
                         SECOND_PLAYER -> {
                             { player2Name.value = it }
                         }
+
                         THIRD_PLAYER -> {
                             { player3Name.value = it }
                         }
+
                         FOURTH_PLAYER -> {
                             { player4Name.value = it }
                         }
+
                         FIFTH_PLAYER -> {
                             { player5Name.value = it }
                         }
+
                         SIXTH_PLAYER -> {
                             { player6Name.value = it }
                         }
+
                         else -> {
                             {}
                         }
@@ -130,8 +135,21 @@ fun AddGameScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
-                onGameSaved(gameTitle.value)
-            }){
+                onGameSaved(
+                    Game(
+                        id = 0,
+                        title = gameTitle.value,
+                        players = listOf(
+                            if (player1Name.value.isNotEmpty()) Player(player1Name.value) else Player(""),
+                            if (player2Name.value.isNotEmpty()) Player(player2Name.value) else Player(""),
+                            if (player3Name.value.isNotEmpty()) Player(player3Name.value) else Player(""),
+                            if (player4Name.value.isNotEmpty()) Player(player4Name.value) else Player(""),
+                            if (player5Name.value.isNotEmpty()) Player(player5Name.value) else Player(""),
+                            if (player6Name.value.isNotEmpty()) Player(player6Name.value) else Player(""),
+                        )
+                    )
+                )
+            }) {
                 Text("Create game")
             }
 

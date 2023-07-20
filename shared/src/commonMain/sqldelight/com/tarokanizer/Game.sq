@@ -3,6 +3,16 @@ CREATE TABLE GameEntity (
   title TEXT NOT NULL
 );
 
+CREATE TABLE PlayerEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    player1 TEXT,
+    player2 TEXT,
+    player3 TEXT,
+    player4 TEXT,
+    player5 TEXT,
+    player6 TEXT
+);
+
 selectAllGames:
 SELECT *
 FROM GameEntity;
@@ -13,4 +23,17 @@ VALUES ?;
 
 deleteGameById:
 DELETE FROM GameEntity
+WHERE id = :id;
+
+insertPlayers:
+INSERT INTO PlayerEntity(id, player1, player2, player3, player4, player5, player6)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+selectPlayersById:
+SELECT *
+FROM PlayerEntity
+WHERE id = :id;
+
+deletePlayersById:
+DELETE FROM PlayerEntity
 WHERE id = :id;
