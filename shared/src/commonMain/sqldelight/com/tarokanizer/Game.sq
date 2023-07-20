@@ -1,5 +1,5 @@
 CREATE TABLE GameEntity (
-  id INTEGER NOT NULL,
+  id INTEGER NOT NULL PRIMARY KEY,
   title TEXT NOT NULL
 );
 

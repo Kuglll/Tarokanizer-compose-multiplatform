@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(appModule: AppModule) {
@@ -76,7 +77,7 @@ fun HomeScreen(appModule: AppModule) {
             }
             Spacer(modifier = Modifier.height(24.dp))
             state.games.forEach {
-                HomeScreenItem(it)
+                HomeScreenItem(it.title)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

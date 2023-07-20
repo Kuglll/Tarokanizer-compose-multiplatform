@@ -1,4 +1,4 @@
 data class HomeScreenState(
-    val games: List<String> = emptyList(),
+    val games: List<Game> = emptyList(),
     val isAddGameScreenOpen: Boolean = false,
 )
