@@ -2,14 +2,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -42,7 +46,7 @@ fun AddGameScreen(
 
     val playerNames = mutableListOf(mutableStateOf(""), mutableStateOf(""))
 
-    //TODO: Make screen scrollable
+    val scrollState = rememberScrollState()
 
     AnimatedVisibility(
         visible = isVisible,
@@ -56,7 +60,7 @@ fun AddGameScreen(
         ),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
+            modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp).verticalScroll(scrollState),
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
