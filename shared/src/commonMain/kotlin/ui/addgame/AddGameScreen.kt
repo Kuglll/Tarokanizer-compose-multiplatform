@@ -42,7 +42,6 @@ fun AddGameScreen(
 
     val playerNames = mutableListOf(mutableStateOf(""), mutableStateOf(""))
 
-    //TODO: Implement state clearing
     //TODO: Make screen scrollable
 
     AnimatedVisibility(
@@ -63,6 +62,9 @@ fun AddGameScreen(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Navigate back", //TODO: See if this can be extracted to string resources
                 modifier = Modifier.clickable {
+                    // Clear state
+                    numberOfPlayersSelected.value = 2
+                    gameTitle.value = ""
                     onBackPressed()
                 }
             )
