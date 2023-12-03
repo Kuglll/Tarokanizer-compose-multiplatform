@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -160,9 +161,11 @@ fun AreYouSureYouWantToDeleteDialog(
     onConfirm: () -> Unit,
 ) {
     Dialog(
-        onDismiss = onDismiss,
+        onDismissRequest = onDismiss,
         content = {
-            Column {
+            Column(
+                modifier = Modifier.background(Color.White),
+            ) {
                 Text(
                     text = "Are you sure you want to delete game: $gameTitle",
                     modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)

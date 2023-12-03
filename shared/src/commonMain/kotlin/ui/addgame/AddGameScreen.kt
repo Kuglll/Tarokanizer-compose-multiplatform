@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -19,7 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import data.Game
 import data.Player
 
@@ -172,34 +177,41 @@ fun NumberOfPlayersPopup(
     onNumberOfPlayersChanged: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
+
+    val numberOfPlayers = remember { mutableStateOf("0") }
+
     Dialog(
-        onDismiss = onDismiss,
+        onDismissRequest = onDismiss,
         content = {
-            Column(modifier = Modifier.padding(16.dp).padding(horizontal = 24.dp)) {
-                Text(text = "2 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(2)
-                    onDismiss()
-                })
+            Column(
+                modifier = Modifier.background(Color.White).padding(16.dp).padding(horizontal = 24.dp),
+            ) {
+                Text(text = "Choose number of players: ")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "3 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(3)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "4 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(4)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "5 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(5)
-                    onDismiss()
-                })
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "6 Players", modifier = Modifier.clickable {
-                    onNumberOfPlayersChanged(6)
-                    onDismiss()
-                })
+                TarokanizerTextField(
+                    value = numberOfPlayers.value,
+                    onValueChange = {
+                        numberOfPlayers.value = it
+                    },
+                    labelText = "Number of players",
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal,
+                        imeAction = ImeAction.Done,
+                    ),
+                )
+                TextButton(
+                    onClick = {
+                        try {
+                            onNumberOfPlayersChanged(numberOfPlayers.value.trim().toInt())
+                        } catch (e: NumberFormatException) {
+                            //TODO: Show error
+                        } finally {
+                            onDismiss()
+                        }
+                    }
+                ) {
+                    Text("Ok")
+                }
             }
         }
     )

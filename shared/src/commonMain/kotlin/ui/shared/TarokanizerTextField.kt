@@ -1,4 +1,5 @@
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -11,6 +12,7 @@ fun TarokanizerTextField(
     value: String,
     onValueChange: (String) -> Unit,
     labelText: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
     TextField(
         value = value,
@@ -23,5 +25,6 @@ fun TarokanizerTextField(
             backgroundColor = Color.White,
             focusedIndicatorColor = Color.Transparent,
         ),
+        keyboardOptions = keyboardOptions,
     )
 }
