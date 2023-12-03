@@ -30,13 +30,6 @@ import data.Player
 
 const val DEFAULT_ANIMATION_DURATION = 300
 
-const val FIRST_PLAYER = 0
-const val SECOND_PLAYER = 1
-const val THIRD_PLAYER = 2
-const val FOURTH_PLAYER = 3
-const val FIFTH_PLAYER = 4
-const val SIXTH_PLAYER = 5
-
 @Composable
 fun AddGameScreen(
     isVisible: Boolean,
@@ -47,14 +40,10 @@ fun AddGameScreen(
     val numberOfPlayersSelected = remember { mutableStateOf(2) }
     val gameTitle = remember { mutableStateOf("") }
 
-    //TODO: Implement state clearing
+    val playerNames = mutableListOf(mutableStateOf(""), mutableStateOf(""))
 
-    val player1Name = remember { mutableStateOf("") }
-    val player2Name = remember { mutableStateOf("") }
-    val player3Name = remember { mutableStateOf("") }
-    val player4Name = remember { mutableStateOf("") }
-    val player5Name = remember { mutableStateOf("") }
-    val player6Name = remember { mutableStateOf("") }
+    //TODO: Implement state clearing
+    //TODO: Make screen scrollable
 
     AnimatedVisibility(
         visible = isVisible,
@@ -72,7 +61,7 @@ fun AddGameScreen(
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Navigate back",
+                contentDescription = "Navigate back", //TODO: See if this can be extracted to string resources
                 modifier = Modifier.clickable {
                     onBackPressed()
                 }
@@ -95,43 +84,9 @@ fun AddGameScreen(
 
             (0 until numberOfPlayersSelected.value).forEach { playerIndex ->
                 TarokanizerTextField(
-                    value = when (playerIndex) {
-                        FIRST_PLAYER -> player1Name.value
-                        SECOND_PLAYER -> player2Name.value
-                        THIRD_PLAYER -> player3Name.value
-                        FOURTH_PLAYER -> player4Name.value
-                        FIFTH_PLAYER -> player5Name.value
-                        SIXTH_PLAYER -> player6Name.value
-                        else -> ""
-                    },
-                    onValueChange = when (playerIndex) {
-                        FIRST_PLAYER -> {
-                            { player1Name.value = it }
-                        }
-
-                        SECOND_PLAYER -> {
-                            { player2Name.value = it }
-                        }
-
-                        THIRD_PLAYER -> {
-                            { player3Name.value = it }
-                        }
-
-                        FOURTH_PLAYER -> {
-                            { player4Name.value = it }
-                        }
-
-                        FIFTH_PLAYER -> {
-                            { player5Name.value = it }
-                        }
-
-                        SIXTH_PLAYER -> {
-                            { player6Name.value = it }
-                        }
-
-                        else -> {
-                            {}
-                        }
+                    value = playerNames[playerIndex].value,
+                    onValueChange = {
+                        playerNames[playerIndex].value = it
                     },
                     labelText = "Player ${playerIndex + 1}"
                 )
@@ -144,14 +99,9 @@ fun AddGameScreen(
                     Game(
                         id = 0,
                         title = gameTitle.value,
-                        players = listOf(
-                            if (player1Name.value.isNotEmpty()) Player(player1Name.value) else Player(""),
-                            if (player2Name.value.isNotEmpty()) Player(player2Name.value) else Player(""),
-                            if (player3Name.value.isNotEmpty()) Player(player3Name.value) else Player(""),
-                            if (player4Name.value.isNotEmpty()) Player(player4Name.value) else Player(""),
-                            if (player5Name.value.isNotEmpty()) Player(player5Name.value) else Player(""),
-                            if (player6Name.value.isNotEmpty()) Player(player6Name.value) else Player(""),
-                        )
+                        players = playerNames.map {
+                            Player(it.value)
+                        }
                     )
                 )
             }) {
@@ -161,6 +111,12 @@ fun AddGameScreen(
             if (isNumberOfPlayersSelectionVisible.value) {
                 NumberOfPlayersPopup(
                     onNumberOfPlayersChanged = {
+                        playerNames.clear()
+                        (0 until it).forEach { _ ->
+                            playerNames.add(
+                                mutableStateOf("")
+                            )
+                        }
                         numberOfPlayersSelected.value = it
                     },
                     onDismiss = {
