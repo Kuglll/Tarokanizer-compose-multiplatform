@@ -4,8 +4,6 @@ import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import co.touchlab.sqliter.DatabaseConfiguration
 import com.tarokanizer.Database
 
-actual fun getPlatformName(): String = "iOS"
-
 fun MainViewController() = ComposeUIViewController { App(appModule = AppModule()) }
 
 actual class DriverFactory {

@@ -6,8 +6,6 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.tarokanizer.Database
 
-actual fun getPlatformName(): String = "Android"
-
 @Composable fun MainView() = App(appModule = AppModule(context = LocalContext.current.applicationContext))
 
 actual class DriverFactory(private val context: Context) {

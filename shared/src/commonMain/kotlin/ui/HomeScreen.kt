@@ -30,13 +30,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import cafe.adriel.voyager.core.screen.Screen
 import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import ui.HomeScreenViewModel
 
+data class HomeScreen(val appModule: AppModule) : Screen {
+
+    @Composable
+    override fun Content() {
+        HomeScreenContent(appModule)
+    }
+
+}
+
 @Composable
-fun HomeScreen(appModule: AppModule) {
+fun HomeScreenContent(appModule: AppModule) {
 
     val viewModel = getViewModel(
         key = "home-screen",
