@@ -1,6 +1,5 @@
 package ui
 
-import data.Game
 import GameDataSource
 import HomeScreenState
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -16,31 +15,14 @@ class HomeScreenViewModel(
 
     private val _state = MutableStateFlow(HomeScreenState())
 
-    init {
-        _state.update {
-            it.copy(games = gameDataSource.getGames())
-        }
-    }
-
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), HomeScreenState())
 
-    fun openAddGameScreen(){
-        _state.update {
-            it.copy(isAddGameScreenOpen = true)
-        }
-    }
-
-    fun hideAddGameScreen(){
-        _state.update {
-            it.copy(isAddGameScreenOpen = false)
-        }
-    }
-
-    fun addGame(game: Game) {
+    init {
         viewModelScope.launch {
-            gameDataSource.storeGame(Game(_state.value.games.size.toLong(), game.title, game.players))
-            _state.update {
-                it.copy(games = gameDataSource.getGames(), isAddGameScreenOpen = false)
+            gameDataSource.getGames().collect { games ->
+                _state.update {
+                    it.copy(games = games)
+                }
             }
         }
     }
@@ -48,9 +30,6 @@ class HomeScreenViewModel(
     fun deleteGame(id: Long){
         viewModelScope.launch {
             gameDataSource.deleteGameById(id)
-            _state.update {
-                it.copy(games = gameDataSource.getGames())
-            }
         }
     }
 

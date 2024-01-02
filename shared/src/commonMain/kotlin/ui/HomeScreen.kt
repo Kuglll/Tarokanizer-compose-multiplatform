@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -48,6 +50,8 @@ data class HomeScreen(val appModule: AppModule) : Screen {
 @Composable
 fun HomeScreenContent(appModule: AppModule) {
 
+    val navigator = LocalNavigator.currentOrThrow
+
     val viewModel = getViewModel(
         key = "home-screen",
         factory = viewModelFactory {
@@ -61,7 +65,7 @@ fun HomeScreenContent(appModule: AppModule) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.openAddGameScreen()
+                    navigator.push(AddGameScreen(appModule, state.games.size))
                 },
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -105,16 +109,6 @@ fun HomeScreenContent(appModule: AppModule) {
             }
         }
     }
-
-    AddGameScreen(
-        isVisible = state.isAddGameScreenOpen,
-        onBackPressed = {
-            viewModel.hideAddGameScreen()
-        },
-        onGameSaved = { game ->
-            viewModel.addGame(game)
-        }
-    )
 }
 
 @Composable

@@ -1,12 +1,18 @@
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.tarokanizer.Database
 import data.Game
 import data.Player
 import data.toGame
 import data.toGameEntity
 import data.toPlayer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 interface GameDataSource {
-    fun getGames(): List<Game>
+    fun getGames(): Flow<List<Game>>
     suspend fun storeGame(game: Game)
     suspend fun deleteGameById(id: Long)
     fun getPlayersByGameId(gameId: Long): List<Player>
@@ -16,9 +22,9 @@ class GameDataSourceImpl(
     val database: Database
 ) : GameDataSource {
 
-    override fun getGames(): List<Game> {
-        return database.gameQueries.selectAllGames().executeAsList().map {
-            it.toGame()
+    override fun getGames(): Flow<List<Game>> {
+        return database.gameQueries.selectAllGames().asFlow().mapToList(Dispatchers.IO).map {
+            it.map { it.toGame() }
         }
     }
 

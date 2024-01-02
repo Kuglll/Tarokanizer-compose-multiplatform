@@ -4,7 +4,7 @@ import cafe.adriel.voyager.navigator.Navigator
 
 @Composable
 fun App(
-    appModule: AppModule
+    appModule: AppModule //TODO: Check if this can be somehow injected automatically
 ) {
     MaterialTheme {
 

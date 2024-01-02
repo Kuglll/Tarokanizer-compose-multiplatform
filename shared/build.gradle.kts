@@ -39,6 +39,8 @@ kotlin {
     }
 
     sourceSets {
+        val sqlDelightVersion = "2.0.1"
+
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)
@@ -49,6 +51,7 @@ kotlin {
                 val voyagerVersion = "1.0.0"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+                implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
             }
         }
         val androidMain by getting {
@@ -56,7 +59,7 @@ kotlin {
                 api("androidx.activity:activity-compose:1.6.1")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.9.0")
-                implementation("app.cash.sqldelight:android-driver:2.0.0-rc02")
+                implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
             }
         }
         val iosX64Main by getting
@@ -68,7 +71,7 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                implementation("app.cash.sqldelight:native-driver:2.0.0-rc02")
+                implementation("app.cash.sqldelight:native-driver:$sqlDelightVersion")
             }
         }
     }
