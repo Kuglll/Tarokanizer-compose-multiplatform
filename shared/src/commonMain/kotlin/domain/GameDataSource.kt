@@ -3,13 +3,13 @@ import data.Game
 import data.Player
 import data.toGame
 import data.toGameEntity
-import data.toListOfPlayers
+import data.toPlayer
 
 interface GameDataSource {
     fun getGames(): List<Game>
     suspend fun storeGame(game: Game)
     suspend fun deleteGameById(id: Long)
-    fun getPlayers(id: Long): List<Player>
+    fun getPlayersByGameId(gameId: Long): List<Player>
 }
 
 class GameDataSourceImpl(
@@ -24,22 +24,23 @@ class GameDataSourceImpl(
 
     override suspend fun storeGame(game: Game) {
         database.gameQueries.insertGame(game.toGameEntity())
-        database.gameQueries.insertPlayers(
-            game.id,
-            game.players[0].name,
-            game.players[1].name,
-            game.players[2].name,
-            game.players[3].name,
-            game.players[4].name,
-            game.players[5].name,
-        )
+        database.gameQueries.transaction {
+            game.players.forEach { player ->
+                database.gameQueries.insertPlayer(
+                    gameId = game.id,
+                    playerName = player.name,
+                )
+            }
+        }
     }
 
     override suspend fun deleteGameById(id: Long) {
         database.gameQueries.deleteGameById(id)
-        database.gameQueries.deletePlayersById(id)
     }
 
-    override fun getPlayers(id: Long): List<Player> = database.gameQueries.selectPlayersById(id).executeAsOne().toListOfPlayers()
+    override fun getPlayersByGameId(gameId: Long): List<Player> =
+        database.gameQueries.selectPlayersByGameId(gameId = gameId).executeAsList().map {
+            it.toPlayer()
+        }
 
 }

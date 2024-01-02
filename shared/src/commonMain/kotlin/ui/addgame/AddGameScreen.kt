@@ -41,10 +41,10 @@ fun AddGameScreen(
     onGameSaved: (Game) -> Unit,
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
-    val numberOfPlayersSelected = remember { mutableStateOf(2) }
     val gameTitle = remember { mutableStateOf("") }
 
     val playerNames = mutableListOf(mutableStateOf(""), mutableStateOf(""))
+    val numberOfPlayersSelected = remember { mutableStateOf(playerNames.size) }
 
     val scrollState = rememberScrollState()
 
@@ -59,76 +59,78 @@ fun AddGameScreen(
             targetOffsetY = { it }
         ),
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp).verticalScroll(scrollState),
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Navigate back", //TODO: See if this can be extracted to string resources
-                modifier = Modifier.clickable {
-                    // Clear state
-                    numberOfPlayersSelected.value = 2
-                    gameTitle.value = ""
-                    onBackPressed()
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            TarokanizerTextField(
-                value = gameTitle.value,
-                onValueChange = {
-                    gameTitle.value = it
-                },
-                labelText = "Title",
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
-                Text("Number of players: ${numberOfPlayersSelected.value}")
-            }
-
-            (0 until numberOfPlayersSelected.value).forEach { playerIndex ->
-                TarokanizerTextField(
-                    value = playerNames[playerIndex].value,
-                    onValueChange = {
-                        playerNames[playerIndex].value = it
-                    },
-                    labelText = "Player ${playerIndex + 1}"
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(onClick = {
-                onGameSaved(
-                    Game(
-                        id = 0,
-                        title = gameTitle.value,
-                        players = playerNames.map {
-                            Player(it.value)
-                        }
-                    )
-                )
-            }) {
-                Text("Create game")
-            }
-
-            if (isNumberOfPlayersSelectionVisible.value) {
-                NumberOfPlayersPopup(
-                    onNumberOfPlayersChanged = {
-                        playerNames.clear()
-                        (0 until it).forEach { _ ->
-                            playerNames.add(
-                                mutableStateOf("")
-                            )
-                        }
-                        numberOfPlayersSelected.value = it
-                    },
-                    onDismiss = {
-                        isNumberOfPlayersSelectionVisible.value = false
+        if(isVisible){ //TODO: Remove this when we add Voyager for navigation
+            Column(
+                modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp).verticalScroll(scrollState),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Navigate back", //TODO: See if this can be extracted to string resources
+                    modifier = Modifier.clickable {
+                        // Clear state
+                        numberOfPlayersSelected.value = 2
+                        gameTitle.value = ""
+                        onBackPressed()
                     }
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TarokanizerTextField(
+                    value = gameTitle.value,
+                    onValueChange = {
+                        gameTitle.value = it
+                    },
+                    labelText = "Title",
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
+                    Text("Number of players: ${numberOfPlayersSelected.value}")
+                }
+
+                (0 until numberOfPlayersSelected.value).forEach { playerIndex ->
+                    TarokanizerTextField(
+                        value = playerNames[playerIndex].value,
+                        onValueChange = {
+                            playerNames[playerIndex].value = it
+                        },
+                        labelText = "Player ${playerIndex + 1}"
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(onClick = {
+                    onGameSaved(
+                        Game(
+                            id = 0,
+                            title = gameTitle.value,
+                            players = playerNames.map {
+                                Player(it.value)
+                            }
+                        )
+                    )
+                }) {
+                    Text("Create game")
+                }
+
+                if (isNumberOfPlayersSelectionVisible.value) {
+                    NumberOfPlayersPopup(
+                        onNumberOfPlayersChanged = {
+                            playerNames.clear()
+                            (0 until it).forEach { _ ->
+                                playerNames.add(
+                                    mutableStateOf("")
+                                )
+                            }
+                            numberOfPlayersSelected.value = it
+                        },
+                        onDismiss = {
+                            isNumberOfPlayersSelectionVisible.value = false
+                        }
+                    )
+                }
             }
         }
     }

@@ -4,13 +4,10 @@ CREATE TABLE GameEntity (
 );
 
 CREATE TABLE PlayerEntity (
-    id INTEGER NOT NULL PRIMARY KEY,
-    player1 TEXT,
-    player2 TEXT,
-    player3 TEXT,
-    player4 TEXT,
-    player5 TEXT,
-    player6 TEXT
+    gameId INTEGER NOT NULL,
+    playerId INTEGER PRIMARY KEY AUTOINCREMENT,
+    playerName TEXT NOT NULL,
+    FOREIGN KEY (gameId) REFERENCES GameEntity(id) ON DELETE CASCADE
 );
 
 selectAllGames:
@@ -25,15 +22,11 @@ deleteGameById:
 DELETE FROM GameEntity
 WHERE id = :id;
 
-insertPlayers:
-INSERT INTO PlayerEntity(id, player1, player2, player3, player4, player5, player6)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+insertPlayer:
+INSERT INTO PlayerEntity(gameId, playerName)
+VALUES (?, ?);
 
-selectPlayersById:
+selectPlayersByGameId:
 SELECT *
 FROM PlayerEntity
-WHERE id = :id;
-
-deletePlayersById:
-DELETE FROM PlayerEntity
-WHERE id = :id;
+WHERE gameId = :gameId;
