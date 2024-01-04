@@ -15,6 +15,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -62,6 +65,14 @@ fun AddGameScreenContent(
     )
 
     val navigator = LocalNavigator.currentOrThrow
+
+    val state by viewModel.state.collectAsState()
+
+    if(state.isGameAdded){
+        LaunchedEffect(state){
+            navigator.pop()
+        }
+    }
 
     //TODO: Use this navigation with Voyager
     //const val DEFAULT_ANIMATION_DURATION = 300
