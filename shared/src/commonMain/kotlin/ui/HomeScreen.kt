@@ -65,7 +65,7 @@ fun HomeScreenContent(appModule: AppModule) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navigator.push(AddGameScreen(appModule, state.games.size))
+                    navigator.push(AddGameScreen(appModule))
                 },
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -114,8 +114,8 @@ fun HomeScreenContent(appModule: AppModule) {
 @Composable
 fun HomeScreenItem(
     game: Game,
-    onDeleteClicked: (Long) -> Unit,
-    onGameClicked: (Long) -> Unit
+    onDeleteClicked: (String) -> Unit,
+    onGameClicked: (String) -> Unit
 ) {
 
     val isDeleteDialogShown = remember { mutableStateOf(false) }

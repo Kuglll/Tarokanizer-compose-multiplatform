@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.map
 interface GameDataSource {
     fun getGames(): Flow<List<Game>>
     suspend fun storeGame(game: Game)
-    suspend fun deleteGameById(id: Long)
-    fun getPlayersByGameId(gameId: Long): List<Player>
+    suspend fun deleteGameById(id: String)
+    fun getPlayersByGameId(gameId: String): List<Player>
 }
 
 class GameDataSourceImpl(
@@ -40,11 +40,11 @@ class GameDataSourceImpl(
         }
     }
 
-    override suspend fun deleteGameById(id: Long) {
+    override suspend fun deleteGameById(id: String) {
         database.gameQueries.deleteGameById(id)
     }
 
-    override fun getPlayersByGameId(gameId: Long): List<Player> =
+    override fun getPlayersByGameId(gameId: String): List<Player> =
         database.gameQueries.selectPlayersByGameId(gameId = gameId).executeAsList().map {
             it.toPlayer()
         }

@@ -1,7 +1,7 @@
 package data
 
 data class Game(
-    val id: Long,
+    val id: String,
     val title: String,
     val players: List<Player>
 )

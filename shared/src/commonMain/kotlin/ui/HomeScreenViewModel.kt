@@ -27,13 +27,13 @@ class HomeScreenViewModel(
         }
     }
 
-    fun deleteGame(id: Long){
+    fun deleteGame(id: String){
         viewModelScope.launch {
             gameDataSource.deleteGameById(id)
         }
     }
 
-    fun showGameDetails(id: Long){
+    fun showGameDetails(id: String){
         //TODO: Implement
     }
 

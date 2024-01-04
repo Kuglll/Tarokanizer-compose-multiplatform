@@ -26,22 +26,18 @@ import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import data.Game
-import data.Player
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import ui.addgame.AddGameViewModel
 
 data class AddGameScreen(
     val appModule: AppModule,
-    val numberOfAllGames: Int,
 ) : Screen {
 
     @Composable
     override fun Content() {
         AddGameScreenContent(
             appModule = appModule,
-            numberOfAllGames = numberOfAllGames,
         )
     }
 }
@@ -49,7 +45,6 @@ data class AddGameScreen(
 @Composable
 fun AddGameScreenContent(
     appModule: AppModule,
-    numberOfAllGames: Int,
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
     val gameTitle = remember { mutableStateOf("") }
@@ -122,14 +117,8 @@ fun AddGameScreenContent(
         Button(
             onClick = {
                 viewModel.addGame(
-                    Game(
-                        id = 0,
-                        title = gameTitle.value,
-                        players = playerNames.map {
-                            Player(it.value)
-                        }
-                    ),
-                    gameId = numberOfAllGames.toLong() + 1 //TODO: Generate random ID
+                    gameTitle = gameTitle.value,
+                    playerNames = playerNames.map { it.value },
                 )
             },
         ) {
