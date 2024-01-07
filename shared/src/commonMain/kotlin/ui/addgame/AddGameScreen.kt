@@ -74,17 +74,6 @@ fun AddGameScreenContent(
         }
     }
 
-    //TODO: Use this navigation with Voyager
-    //const val DEFAULT_ANIMATION_DURATION = 300
-    //        enter = slideInVertically(
-    //            animationSpec = tween(durationMillis = DEFAULT_ANIMATION_DURATION),
-    //            initialOffsetY = { it }
-    //        ),
-    //        exit = slideOutVertically(
-    //            animationSpec = tween(durationMillis = DEFAULT_ANIMATION_DURATION),
-    //            targetOffsetY = { it }
-    //        ),
-
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp).verticalScroll(scrollState),
     ) {
