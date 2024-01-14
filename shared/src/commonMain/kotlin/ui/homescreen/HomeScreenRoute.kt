@@ -91,12 +91,8 @@ private fun HomeScreenContent(
                     contentDescription = "Add game",
                 )
             }
-        }
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        },
+        topBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,6 +107,12 @@ private fun HomeScreenContent(
                     fontWeight = FontWeight.Bold
                 )
             }
+        },
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Spacer(modifier = Modifier.height(24.dp))
             games.forEach {
                 HomeScreenItem(
