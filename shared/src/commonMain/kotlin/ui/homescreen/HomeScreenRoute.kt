@@ -18,7 +18,6 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.AddCircle
@@ -33,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -41,6 +39,7 @@ import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import ui.gamedetails.GameDetailsScreenRoute
+import ui.shared.TarokanizerAlertDialog
 
 data class HomeScreenRoute(val appModule: AppModule) : Screen {
 
@@ -166,46 +165,16 @@ private fun HomeScreenItem(
     }
 
     if (isDeleteDialogShown.value) {
-        AreYouSureYouWantToDeleteDialog(
-            gameTitle = game.title,
-            onDismiss = { isDeleteDialogShown.value = false },
+        TarokanizerAlertDialog(
+            title = "Are you sure you want to delete game: ${game.title}",
+            confirmButtonText = "Yes",
+            dismissButtonText = "No",
+            onDismiss = {
+                isDeleteDialogShown.value = false
+            },
             onConfirm = {
                 onDeleteClicked(game.id)
             }
         )
     }
-}
-
-@Composable
-fun AreYouSureYouWantToDeleteDialog(
-    gameTitle: String,
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit,
-) {
-    Dialog(
-        onDismissRequest = onDismiss,
-        content = {
-            Column(
-                modifier = Modifier.background(Color.White),
-            ) {
-                Text(
-                    text = "Are you sure you want to delete game: $gameTitle",
-                    modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
-                )
-                Row {
-                    Modifier.weight(1f)
-                    TextButton(
-                        onClick = onDismiss
-                    ) {
-                        Text("No")
-                    }
-                    TextButton(
-                        onClick = onConfirm
-                    ) {
-                        Text("Yes")
-                    }
-                }
-            }
-        }
-    )
 }
