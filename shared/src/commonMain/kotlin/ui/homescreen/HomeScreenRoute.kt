@@ -40,6 +40,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.gamedetails.GameDetailsScreenRoute
 
 data class HomeScreenRoute(val appModule: AppModule) : Screen {
 
@@ -119,7 +120,7 @@ private fun HomeScreenContent(
                         onDeleteGame(id)
                     },
                     onGameClicked = { id ->
-//                        navigator.push(GameDetailsScreenRoute(appModule, id))
+                        navigator.push(GameDetailsScreenRoute(appModule, id))
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
