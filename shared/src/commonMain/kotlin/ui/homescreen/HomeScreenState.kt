@@ -1,3 +1,5 @@
+package ui.homescreen
+
 import data.Game
 
 data class HomeScreenState(

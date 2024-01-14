@@ -1,3 +1,7 @@
+package ui.homescreen
+
+import AddGameScreen
+import AppModule
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,22 +40,20 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import data.Game
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import ui.HomeScreenViewModel
 
-data class HomeScreen(val appModule: AppModule) : Screen {
+data class HomeScreenRoute(val appModule: AppModule) : Screen {
 
     @Composable
     override fun Content() {
-        HomeScreenContent(appModule)
+        HomeScreen(appModule)
     }
 
 }
 
 @Composable
-fun HomeScreenContent(appModule: AppModule) {
-
-    val navigator = LocalNavigator.currentOrThrow
-
+fun HomeScreen(
+    appModule: AppModule,
+) {
     val viewModel = getViewModel(
         key = "home-screen",
         factory = viewModelFactory {
@@ -60,6 +62,21 @@ fun HomeScreenContent(appModule: AppModule) {
     )
 
     val state by viewModel.state.collectAsState()
+
+    HomeScreenContent(
+        appModule = appModule,
+        games = state.games,
+        onDeleteGame = viewModel::deleteGame
+    )
+}
+
+@Composable
+private fun HomeScreenContent(
+    appModule: AppModule,
+    games: List<Game>,
+    onDeleteGame: (String) -> Unit,
+) {
+    val navigator = LocalNavigator.currentOrThrow
 
     Scaffold(
         floatingActionButton = {
@@ -95,14 +112,14 @@ fun HomeScreenContent(appModule: AppModule) {
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            state.games.forEach {
+            games.forEach {
                 HomeScreenItem(
                     game = it,
                     onDeleteClicked = { id ->
-                        viewModel.deleteGame(id)
+                        onDeleteGame(id)
                     },
                     onGameClicked = { id ->
-                        viewModel.showGameDetails(id)
+//                        navigator.push(GameDetailsScreenRoute(appModule, id))
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -112,7 +129,7 @@ fun HomeScreenContent(appModule: AppModule) {
 }
 
 @Composable
-fun HomeScreenItem(
+private fun HomeScreenItem(
     game: Game,
     onDeleteClicked: (String) -> Unit,
     onGameClicked: (String) -> Unit

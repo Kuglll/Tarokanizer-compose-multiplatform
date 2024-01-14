@@ -1,7 +1,6 @@
-package ui
+package ui.homescreen
 
 import GameDataSource
-import HomeScreenState
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
-    private val gameDataSource: GameDataSource
+    private val gameDataSource: GameDataSource,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -31,10 +30,6 @@ class HomeScreenViewModel(
         viewModelScope.launch {
             gameDataSource.deleteGameById(id)
         }
-    }
-
-    fun showGameDetails(id: String){
-        //TODO: Implement
     }
 
 }
