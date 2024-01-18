@@ -14,9 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -79,17 +80,8 @@ fun GameDetailsScreen(
 
     GameDetailsScreenContent(
         title = "Test",
-        players = listOf("Player 1", "Player 2", "Player 3", "Playeeeeeeer 3", "Player 3", "Player 3", "Player 3", "Player 3").map {
-            Player(
-                it
-            )
-        },
-        rounds = listOf(
-            Round(listOf(0, 0, 0, 0, 0, 0, 0, 0)),
-            Round(listOf(0, 2, 0, 0, 10, 0, 0, 0)),
-            Round(listOf(0, 0, 0, 0, 70, 0, 0, 0)),
-            Round(listOf(0, 0, 350, 0, 0, 0, 0, 0)),
-        ),
+        players = state.players,
+        rounds = state.rounds,
     )
 }
 
@@ -184,7 +176,7 @@ private fun PlayerNamesRow(
         players.forEachIndexed { index, player ->
             Row(
                 modifier = Modifier.onGloballyPositioned {
-                    with(density){
+                    with(density) {
                         playerRowHeight.value = it.size.height.toDp()
                     }
                 }
@@ -225,10 +217,8 @@ private fun RoundsContent(
 
     val density = LocalDensity.current
 
-    Column(
-        modifier = Modifier.verticalScroll(rememberScrollState())
-    ) {
-        rounds.forEach { round ->
+    LazyColumn {
+        items(rounds) { round ->
             Row(
                 modifier = Modifier.onGloballyPositioned {
                     with(density) {
