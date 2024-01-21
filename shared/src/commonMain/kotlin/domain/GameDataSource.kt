@@ -17,6 +17,7 @@ interface GameDataSource {
     suspend fun storeGame(game: Game)
     suspend fun deleteGameById(id: String)
     fun getPlayersByGameId(gameId: String): Flow<List<Player>>
+    suspend fun storeRound(gameId: String, points: List<Int>)
 }
 
 class GameDataSourceImpl(
@@ -55,5 +56,15 @@ class GameDataSourceImpl(
                 playerEntity.toPlayer()
             }
         }
+
+    override suspend fun storeRound(
+        gameId: String,
+        points: List<Int>,
+    ) {
+        database.gameQueries.insertRound(
+            gameId = gameId,
+            points = points,
+        )
+    }
 
 }

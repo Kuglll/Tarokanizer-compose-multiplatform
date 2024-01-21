@@ -70,7 +70,7 @@ fun GameDetailsScreen(
     id: String,
 ) {
     val viewModel = getViewModel(
-        key = "home-screen",
+        key = "game-details",
         factory = viewModelFactory {
             GameDetailsViewModel(appModule.gameDataSource, id)
         }
@@ -82,6 +82,7 @@ fun GameDetailsScreen(
         title = state.title,
         players = state.players,
         rounds = state.rounds,
+        onStoreRoundClicked = viewModel::storeRound
     )
 }
 
@@ -90,6 +91,7 @@ fun GameDetailsScreenContent(
     title: String,
     players: List<Player>,
     rounds: List<Round>,
+    onStoreRoundClicked: (List<Int>) -> Unit,
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
@@ -97,7 +99,10 @@ fun GameDetailsScreenContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    //TODO: Add round somehow
+                    onStoreRoundClicked(
+                        listOf(1,2,3,4),
+                    )
+                    //TODO: Add UI for adding points and pass that to viewmodel
                 },
                 shape = RoundedCornerShape(20.dp)
             ) {

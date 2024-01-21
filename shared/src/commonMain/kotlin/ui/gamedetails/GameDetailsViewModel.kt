@@ -32,7 +32,19 @@ class GameDetailsViewModel(
             }
         }
 
+        //TODO: Fetch rounds and update state
 
+    }
+
+    fun storeRound(
+        points: List<Int>
+    ){
+        viewModelScope.launch {
+            gameDataSource.storeRound(
+                gameId = id,
+                points = points,
+            )
+        }
     }
 
 }

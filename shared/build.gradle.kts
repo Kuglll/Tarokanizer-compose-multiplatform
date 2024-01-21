@@ -52,6 +52,7 @@ kotlin {
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
                 implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
+                implementation("app.cash.sqldelight:primitive-adapters:$sqlDelightVersion")
             }
         }
         val androidMain by getting {

@@ -1,3 +1,6 @@
+import kotlin.Int;
+import kotlin.collections.List;
+
 CREATE TABLE GameEntity (
   id TEXT NOT NULL PRIMARY KEY,
   title TEXT NOT NULL
@@ -7,6 +10,13 @@ CREATE TABLE PlayerEntity (
     gameId TEXT NOT NULL,
     playerId INTEGER PRIMARY KEY AUTOINCREMENT,
     playerName TEXT NOT NULL,
+    FOREIGN KEY (gameId) REFERENCES GameEntity(id) ON DELETE CASCADE
+);
+
+CREATE TABLE RoundEntity(
+    gameId TEXT NOT NULL,
+    roundId INTEGER PRIMARY KEY AUTOINCREMENT,
+    points TEXT AS List<Int> NOT NULL,
     FOREIGN KEY (gameId) REFERENCES GameEntity(id) ON DELETE CASCADE
 );
 
@@ -35,3 +45,7 @@ selectPlayersByGameId:
 SELECT *
 FROM PlayerEntity
 WHERE gameId = :gameId;
+
+insertRound:
+INSERT INTO RoundEntity(gameId, points)
+VALUES (?, ?);
