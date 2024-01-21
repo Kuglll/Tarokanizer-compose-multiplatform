@@ -79,7 +79,7 @@ fun GameDetailsScreen(
     val state by viewModel.state.collectAsState()
 
     GameDetailsScreenContent(
-        title = "Test",
+        title = state.title,
         players = state.players,
         rounds = state.rounds,
     )
@@ -118,6 +118,7 @@ fun GameDetailsScreenContent(
     ) {
         val scroll = rememberScrollState()
 
+        //TODO: Fix layout so it takes whole screen if there is not enough players
         Column(
             modifier = Modifier.fillMaxSize().horizontalScroll(scroll),
         ) {

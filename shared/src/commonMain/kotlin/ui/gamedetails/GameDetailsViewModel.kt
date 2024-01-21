@@ -5,7 +5,8 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import ui.homescreen.HomeScreenState
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class GameDetailsViewModel(
     private val gameDataSource: GameDataSource,
@@ -17,8 +18,21 @@ class GameDetailsViewModel(
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), GameDetailsState())
 
     init {
+        viewModelScope.launch {
+            gameDataSource.getPlayersByGameId(id).collect { players ->
+                _state.update {
+                    it.copy(players = players)
+                }
+            }
+        }
 
-        //TODO: Get game details - name, players, points, etc.
+        viewModelScope.launch {
+            _state.update {
+                it.copy(title = gameDataSource.getGameTitleById(id))
+            }
+        }
+
+
     }
 
 }
