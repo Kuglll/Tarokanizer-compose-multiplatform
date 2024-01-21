@@ -49,3 +49,8 @@ WHERE gameId = :gameId;
 insertRound:
 INSERT INTO RoundEntity(gameId, points)
 VALUES (?, ?);
+
+selectRoundsByGameId:
+SELECT *
+FROM RoundEntity
+WHERE gameId = :gameId;

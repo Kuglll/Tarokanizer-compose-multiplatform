@@ -27,12 +27,18 @@ class GameDetailsViewModel(
         }
 
         viewModelScope.launch {
+            gameDataSource.getRoundsByGameId(id).collect { rounds ->
+                _state.update {
+                    it.copy(rounds = rounds)
+                }
+            }
+        }
+
+        viewModelScope.launch {
             _state.update {
                 it.copy(title = gameDataSource.getGameTitleById(id))
             }
         }
-
-        //TODO: Fetch rounds and update state
 
     }
 

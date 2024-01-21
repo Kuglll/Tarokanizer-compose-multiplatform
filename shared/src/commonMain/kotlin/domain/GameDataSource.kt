@@ -3,9 +3,11 @@ import app.cash.sqldelight.coroutines.mapToList
 import com.tarokanizer.Database
 import data.Game
 import data.Player
+import data.Round
 import data.toGame
 import data.toGameEntity
 import data.toPlayer
+import data.toRound
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +20,7 @@ interface GameDataSource {
     suspend fun deleteGameById(id: String)
     fun getPlayersByGameId(gameId: String): Flow<List<Player>>
     suspend fun storeRound(gameId: String, points: List<Int>)
+    fun getRoundsByGameId(gameId: String): Flow<List<Round>>
 }
 
 class GameDataSourceImpl(
@@ -66,5 +69,12 @@ class GameDataSourceImpl(
             points = points,
         )
     }
+
+    override fun getRoundsByGameId(gameId: String): Flow<List<Round>> =
+        database.gameQueries.selectRoundsByGameId(gameId = gameId).asFlow().mapToList(Dispatchers.IO).map {
+            it.map { roundEntity ->
+                roundEntity.toRound()
+            }
+        }
 
 }
