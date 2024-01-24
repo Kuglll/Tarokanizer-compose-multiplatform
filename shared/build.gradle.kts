@@ -3,7 +3,7 @@ plugins {
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
-    id("app.cash.sqldelight") version "2.0.0-rc02"
+    id("app.cash.sqldelight") version "2.0.1"
 }
 
 kotlin {
@@ -12,6 +12,7 @@ kotlin {
     targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
         binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
             export("dev.icerock.moko:mvvm-core:0.16.1")
+            linkerOpts.add("-lsqlite3")
         }
     }
 
