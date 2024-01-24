@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -48,6 +49,7 @@ import data.Player
 import data.Round
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.shared.getScreenWidth
 
 data class GameDetailsScreenRoute(
     val appModule: AppModule,
@@ -100,7 +102,7 @@ fun GameDetailsScreenContent(
             FloatingActionButton(
                 onClick = {
                     onStoreRoundClicked(
-                        listOf(1,2,3,4),
+                        listOf(1, 2, 3, 4),
                     )
                     //TODO: Add UI for adding points and pass that to viewmodel
                 },
@@ -123,15 +125,32 @@ fun GameDetailsScreenContent(
     ) {
         val scroll = rememberScrollState()
 
-        //TODO: Fix layout so it takes whole screen if there is not enough players
+        val screenWidth = getScreenWidth()
+        val columnMinWidth = remember { 80.dp }
+
+        val columnWidth = remember {
+            if (canAllPlayersBeDisplayedOnScreen(
+                    players = players,
+                    screenWidth = screenWidth.dp,
+                    playerRowMinWidth = columnMinWidth,
+                )
+            ) {
+                screenWidth.dp / players.size
+            } else {
+                columnMinWidth
+            }
+        }
+
         Column(
             modifier = Modifier.fillMaxSize().horizontalScroll(scroll),
         ) {
             PlayerNamesRow(
                 players = players,
+                columnWidth = columnWidth,
             )
             RoundsContent(
                 rounds = rounds,
+                columnWidth = columnWidth,
             )
         }
     }
@@ -169,14 +188,14 @@ private fun GameDetailsScreenTopBar(
 
 @Composable
 private fun PlayerNamesRow(
-    players: List<Player>
+    players: List<Player>,
+    columnWidth: Dp,
 ) {
     val playerRowHeight = remember { mutableStateOf(0.dp) }
 
     val density = LocalDensity.current
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         players.forEachIndexed { index, player ->
@@ -190,15 +209,13 @@ private fun PlayerNamesRow(
                 Column {
                     Text(
                         text = player.name,
-                        modifier = Modifier.width(80.dp).padding(4.dp),
+                        modifier = Modifier.width(columnWidth).padding(4.dp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.Center,
                     )
                     Divider(
-                        modifier = Modifier
-                            .width(80.dp)
-                            .height(2.dp),
+                        modifier = Modifier.width(columnWidth).height(2.dp),
                         color = Color.Black,
                     )
                 }
@@ -215,9 +232,16 @@ private fun PlayerNamesRow(
     }
 }
 
+private fun canAllPlayersBeDisplayedOnScreen(
+    players: List<Player>,
+    screenWidth: Dp,
+    playerRowMinWidth: Dp,
+): Boolean = playerRowMinWidth.value * players.size <= screenWidth.value
+
 @Composable
 private fun RoundsContent(
     rounds: List<Round>,
+    columnWidth: Dp,
 ) {
     val singleRoundRowHeight = remember { mutableStateOf(0.dp) }
 
@@ -237,13 +261,13 @@ private fun RoundsContent(
                         Column {
                             Text(
                                 text = it.toString(),
-                                modifier = Modifier.width(80.dp),
+                                modifier = Modifier.width(columnWidth),
                                 textAlign = TextAlign.Center,
                                 fontSize = 20.sp,
                             )
                             Divider(
                                 modifier = Modifier
-                                    .width(80.dp)
+                                    .width(columnWidth)
                                     .height(2.dp),
                                 color = Color.Black,
                             )
