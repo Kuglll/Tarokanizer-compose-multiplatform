@@ -175,6 +175,7 @@ private fun HomeScreenItem(
                 isDeleteDialogShown.value = false
             },
             onConfirm = {
+                isDeleteDialogShown.value = false
                 onDeleteClicked(game.id)
             }
         )
