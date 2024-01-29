@@ -36,20 +36,20 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import ui.addgame.AddGameViewModel
 
-data class AddGameScreen(
+data class AddGameScreenRoute(
     val appModule: AppModule,
 ) : Screen {
 
     @Composable
     override fun Content() {
-        AddGameScreenContent(
+        AddGameScreen(
             appModule = appModule,
         )
     }
 }
 
 @Composable
-fun AddGameScreenContent(
+fun AddGameScreen(
     appModule: AppModule,
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }

@@ -1,6 +1,6 @@
 package ui.homescreen
 
-import AddGameScreen
+import AddGameScreenRoute
 import AppModule
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,7 +82,7 @@ private fun HomeScreenContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navigator.push(AddGameScreen(appModule))
+                    navigator.push(AddGameScreenRoute(appModule))
                 },
                 shape = RoundedCornerShape(20.dp)
             ) {
