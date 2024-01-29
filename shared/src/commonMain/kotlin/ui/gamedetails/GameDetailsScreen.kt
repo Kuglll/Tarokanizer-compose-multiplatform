@@ -49,18 +49,19 @@ import data.Player
 import data.Round
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.addround.AddRoundScreenRoute
 import ui.shared.getScreenWidth
 
 data class GameDetailsScreenRoute(
     val appModule: AppModule,
-    val id: String,
+    val gameId: String,
 ) : Screen {
 
     @Composable
     override fun Content() {
         GameDetailsScreen(
             appModule = appModule,
-            id = id,
+            gameId = gameId,
         )
     }
 
@@ -69,12 +70,14 @@ data class GameDetailsScreenRoute(
 @Composable
 fun GameDetailsScreen(
     appModule: AppModule,
-    id: String,
+    gameId: String,
 ) {
+    val navigator = LocalNavigator.currentOrThrow
+
     val viewModel = getViewModel(
         key = "game-details",
         factory = viewModelFactory {
-            GameDetailsViewModel(appModule.gameDataSource, id)
+            GameDetailsViewModel(appModule.gameDataSource, gameId)
         }
     )
 
@@ -84,7 +87,9 @@ fun GameDetailsScreen(
         title = state.title,
         players = state.players,
         rounds = state.rounds,
-        onStoreRoundClicked = viewModel::storeRound
+        onAddRoundClicked = {
+            navigator.push(AddRoundScreenRoute(appModule, gameId))
+        }
     )
 }
 
@@ -93,19 +98,14 @@ fun GameDetailsScreenContent(
     title: String,
     players: List<Player>,
     rounds: List<Round>,
-    onStoreRoundClicked: (List<Int>) -> Unit,
+    onAddRoundClicked: () -> Unit,
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    onStoreRoundClicked(
-                        listOf(1, 2, 3, 4),
-                    )
-                    //TODO: Add UI for adding points and pass that to viewmodel
-                },
+                onClick = onAddRoundClicked,
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Icon(

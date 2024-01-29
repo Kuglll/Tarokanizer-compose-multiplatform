@@ -1,4 +1,4 @@
-package ui.gamedetails
+package ui.addround
 
 import GameDataSource
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class GameDetailsViewModel(
+class AddRoundViewModel(
     private val gameDataSource: GameDataSource,
     private val gameId: String,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(GameDetailsState())
+    private val _state = MutableStateFlow(AddRoundState())
 
-    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), GameDetailsState())
+    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), AddRoundState())
 
     init {
         viewModelScope.launch {
@@ -25,21 +25,20 @@ class GameDetailsViewModel(
                 }
             }
         }
+    }
 
+    fun storeRound(
+        points: List<Int>
+    ){
         viewModelScope.launch {
-            gameDataSource.getRoundsByGameId(gameId).collect { rounds ->
-                _state.update {
-                    it.copy(rounds = rounds)
-                }
-            }
-        }
-
-        viewModelScope.launch {
+            gameDataSource.storeRound(
+                gameId = gameId,
+                points = points,
+            )
             _state.update {
-                it.copy(title = gameDataSource.getGameTitleById(gameId))
+                it.copy(isRoundAdded = true)
             }
         }
-
     }
 
 }
