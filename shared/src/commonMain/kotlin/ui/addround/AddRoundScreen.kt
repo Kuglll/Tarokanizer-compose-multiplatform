@@ -108,11 +108,11 @@ private fun AddRoundScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
+        Text(text = "Add points for players:")
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         players.forEachIndexed { index, player ->
-            Text(
-                text = player.name,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
             TarokanizerTextField(
                 value = playerPoints[index].value,
                 onValueChange = {
@@ -140,7 +140,7 @@ private fun AddRoundScreenContent(
                 )
             },
         ) {
-            Text("Add round")
+            Text(text = "Add round")
         }
     }
 }
