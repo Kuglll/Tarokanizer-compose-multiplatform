@@ -128,18 +128,17 @@ fun GameDetailsScreenContent(
         val screenWidth = getScreenWidth()
         val columnMinWidth = remember { 80.dp }
 
-        val columnWidth = remember {
-            if (canAllPlayersBeDisplayedOnScreen(
-                    players = players,
-                    screenWidth = screenWidth.dp,
-                    playerRowMinWidth = columnMinWidth,
-                )
-            ) {
-                screenWidth.dp / players.size
-            } else {
-                columnMinWidth
-            }
+        val columnWidth = if (canAllPlayersBeDisplayedOnScreen(
+                players = players,
+                screenWidth = screenWidth.dp,
+                playerRowMinWidth = columnMinWidth,
+            )
+        ) {
+            screenWidth.dp / players.size
+        } else {
+            columnMinWidth
         }
+
 
         Column(
             modifier = Modifier.fillMaxSize().horizontalScroll(scroll),
