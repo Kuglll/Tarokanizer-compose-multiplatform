@@ -1,6 +1,7 @@
 package ui.gamedetails
 
 import GameDataSource
+import data.Round
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,7 +30,15 @@ class GameDetailsViewModel(
         viewModelScope.launch {
             gameDataSource.getRoundsByGameId(gameId).collect { rounds ->
                 _state.update {
-                    it.copy(rounds = rounds)
+                    val sums = if(rounds.isNotEmpty()){
+                        calculateSums(rounds)
+                    } else {
+                        emptyList()
+                    }
+                    it.copy(
+                        rounds = rounds,
+                        sums = sums,
+                    )
                 }
             }
         }
@@ -40,6 +49,19 @@ class GameDetailsViewModel(
             }
         }
 
+    }
+
+    private fun calculateSums(
+        rounds: List<Round>,
+    ): List<Int>{
+        val numberOfPlayers = rounds[0].points.size
+        val sums = MutableList(size = numberOfPlayers, init = {0})
+        rounds.forEach {
+            it.points.forEachIndexed { index, points ->
+                sums[index] += points
+            }
+        }
+        return sums
     }
 
 }

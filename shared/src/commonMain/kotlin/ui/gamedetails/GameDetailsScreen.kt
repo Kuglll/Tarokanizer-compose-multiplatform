@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -87,6 +86,7 @@ fun GameDetailsScreen(
         title = state.title,
         players = state.players,
         rounds = state.rounds,
+        sums = state.sums,
         onAddRoundClicked = {
             navigator.push(AddRoundScreenRoute(appModule, gameId))
         }
@@ -98,6 +98,7 @@ fun GameDetailsScreenContent(
     title: String,
     players: List<Player>,
     rounds: List<Round>,
+    sums: List<Int>,
     onAddRoundClicked: () -> Unit,
 ) {
     val navigator = LocalNavigator.currentOrThrow
@@ -141,14 +142,22 @@ fun GameDetailsScreenContent(
 
 
         Column(
-            modifier = Modifier.fillMaxSize().horizontalScroll(scroll),
+            modifier = Modifier.horizontalScroll(scroll)
         ) {
-            PlayerNamesRow(
-                players = players,
-                columnWidth = columnWidth,
-            )
-            RoundsContent(
-                rounds = rounds,
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                PlayerNamesRow(
+                    players = players,
+                    columnWidth = columnWidth,
+                )
+                RoundsContent(
+                    rounds = rounds,
+                    columnWidth = columnWidth,
+                )
+            }
+            SumsContent(
+                sums = sums,
                 columnWidth = columnWidth,
             )
         }
@@ -280,6 +289,52 @@ private fun RoundsContent(
                             )
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SumsContent(
+    sums: List<Int>,
+    columnWidth: Dp,
+) {
+    val singleSumRowHeight = remember { mutableStateOf(0.dp) }
+
+    val density = LocalDensity.current
+
+    Row(
+        modifier = Modifier.fillMaxWidth().onGloballyPositioned {
+            with(density) {
+                singleSumRowHeight.value = it.size.height.toDp()
+            }
+        }
+    ){
+        sums.forEachIndexed { index, sum ->
+            Row {
+                Column {
+                    Divider(
+                        modifier = Modifier
+                            .width(columnWidth)
+                            .height(2.dp),
+                        color = Color.Black,
+                    )
+                    Text(
+                        text = sum.toString(),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.width(columnWidth),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                if (index != sums.size - 1) {
+                    Divider(
+                        modifier = Modifier
+                            .width(2.dp)
+                            .height(singleSumRowHeight.value),
+                        color = Color.Black,
+                    )
                 }
             }
         }
