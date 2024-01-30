@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -140,20 +141,29 @@ fun GameDetailsScreenContent(
             columnMinWidth
         }
 
+        val density = LocalDensity.current
+
+        val contentHeight = remember { mutableStateOf(0.dp) }
 
         Column(
             modifier = Modifier.horizontalScroll(scroll)
         ) {
+            PlayerNamesRow(
+                players = players,
+                columnWidth = columnWidth,
+            )
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).onGloballyPositioned {
+                    with(density) {
+                        contentHeight.value = it.size.height.toDp()
+                    }
+                },
             ) {
-                PlayerNamesRow(
-                    players = players,
-                    columnWidth = columnWidth,
-                )
                 RoundsContent(
                     rounds = rounds,
+                    numberOfPlayers = players.size,
                     columnWidth = columnWidth,
+                    contentHeight = contentHeight.value,
                 )
             }
             SumsContent(
@@ -199,9 +209,9 @@ private fun PlayerNamesRow(
     players: List<Player>,
     columnWidth: Dp,
 ) {
-    val playerRowHeight = remember { mutableStateOf(0.dp) }
-
     val density = LocalDensity.current
+
+    val playerRowHeight = remember { mutableStateOf(0.dp) }
 
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -221,6 +231,7 @@ private fun PlayerNamesRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
                     )
                     Divider(
                         modifier = Modifier.width(columnWidth).height(2.dp),
@@ -249,11 +260,16 @@ private fun canAllPlayersBeDisplayedOnScreen(
 @Composable
 private fun RoundsContent(
     rounds: List<Round>,
+    numberOfPlayers: Int,
     columnWidth: Dp,
+    contentHeight: Dp,
 ) {
-    val singleRoundRowHeight = remember { mutableStateOf(0.dp) }
 
     val density = LocalDensity.current
+
+    val singleRoundRowHeight = remember { mutableStateOf(0.dp) }
+
+    //TODO: Implement round deletion
 
     LazyColumn {
         items(rounds) { round ->
@@ -292,6 +308,24 @@ private fun RoundsContent(
                 }
             }
         }
+        // Empty lines till the end of the scoreboard
+        item {
+            Row {
+                (0 until numberOfPlayers).forEach { index ->
+                    if (index != numberOfPlayers - 1){
+                        Box(
+                            modifier = Modifier.width(columnWidth)
+                        )
+                        Divider(
+                            modifier = Modifier
+                                .width(2.dp)
+                                .height(contentHeight - (rounds.size * singleRoundRowHeight.value.value).dp),
+                            color = Color.Black,
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -300,17 +334,17 @@ private fun SumsContent(
     sums: List<Int>,
     columnWidth: Dp,
 ) {
-    val singleSumRowHeight = remember { mutableStateOf(0.dp) }
-
     val density = LocalDensity.current
+
+    val sumRowHeight = remember { mutableStateOf(0.dp) }
 
     Row(
         modifier = Modifier.fillMaxWidth().onGloballyPositioned {
             with(density) {
-                singleSumRowHeight.value = it.size.height.toDp()
+                sumRowHeight.value = it.size.height.toDp()
             }
         }
-    ){
+    ) {
         sums.forEachIndexed { index, sum ->
             Row {
                 Column {
@@ -332,7 +366,7 @@ private fun SumsContent(
                     Divider(
                         modifier = Modifier
                             .width(2.dp)
-                            .height(singleSumRowHeight.value),
+                            .height(sumRowHeight.value),
                         color = Color.Black,
                     )
                 }
