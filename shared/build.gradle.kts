@@ -112,6 +112,7 @@ sqldelight {
     databases {
         create("Database") {
             packageName.set("com.tarokanizer")
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight"))
         }
         linkSqlite.set(false)
     }
