@@ -102,6 +102,7 @@ fun AddGameScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
+            //TODO: Replace with stringResource(SharedRes.strings.number_of_players) when https://github.com/icerockdev/moko-resources/issues/613 is fixed
             Text("Number of players: ${numberOfPlayersSelected.value}")
         }
 

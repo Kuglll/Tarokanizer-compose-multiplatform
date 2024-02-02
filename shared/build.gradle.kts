@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     id("app.cash.sqldelight") version "2.0.1"
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
@@ -24,6 +25,7 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
+            export("dev.icerock.moko:resources:0.23.0")
         }
     }
 
@@ -54,6 +56,7 @@ kotlin {
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
                 implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("app.cash.sqldelight:primitive-adapters:$sqlDelightVersion")
+                api("dev.icerock.moko:resources-compose:0.23.0")
             }
         }
         val androidMain by getting {
@@ -63,6 +66,7 @@ kotlin {
                 api("androidx.core:core-ktx:1.9.0")
                 implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
             }
+            dependsOn(commonMain)
         }
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -116,4 +120,9 @@ sqldelight {
         }
         linkSqlite.set(false)
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.tarokanizer.common"
+    multiplatformResourcesClassName = "SharedRes"
 }
