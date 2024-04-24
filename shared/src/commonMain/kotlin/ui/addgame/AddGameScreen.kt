@@ -32,8 +32,10 @@ import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.tarokanizer.common.SharedRes
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.icerock.moko.resources.compose.stringResource
 import ui.addgame.AddGameViewModel
 
 data class AddGameScreenRoute(
@@ -102,8 +104,7 @@ fun AddGameScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(onClick = { isNumberOfPlayersSelectionVisible.value = !isNumberOfPlayersSelectionVisible.value }) {
-            //TODO: Replace with stringResource(SharedRes.strings.number_of_players) when https://github.com/icerockdev/moko-resources/issues/613 is fixed
-            Text("Number of players: ${numberOfPlayersSelected.value}")
+            Text(stringResource(SharedRes.strings.number_of_players, numberOfPlayersSelected.value))
         }
 
         (0 until numberOfPlayersSelected.value).forEach { playerIndex ->

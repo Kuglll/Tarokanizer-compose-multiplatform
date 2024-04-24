@@ -25,7 +25,7 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
-            export("dev.icerock.moko:resources:0.23.0")
+            export("dev.icerock.moko:resources:0.24.0-beta-1")
         }
     }
 
@@ -56,7 +56,7 @@ kotlin {
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
                 implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("app.cash.sqldelight:primitive-adapters:$sqlDelightVersion")
-                api("dev.icerock.moko:resources-compose:0.23.0")
+                api("dev.icerock.moko:resources-compose:0.24.0-beta-1")
             }
         }
         val androidMain by getting {
@@ -66,7 +66,6 @@ kotlin {
                 api("androidx.core:core-ktx:1.9.0")
                 implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
             }
-            dependsOn(commonMain)
         }
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -123,6 +122,6 @@ sqldelight {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "com.tarokanizer.common"
-    multiplatformResourcesClassName = "SharedRes"
+    multiplatformResources.resourcesPackage.set("com.tarokanizer.common")
+    multiplatformResources.resourcesClassName.set("SharedRes")
 }
