@@ -32,6 +32,7 @@ import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import co.touchlab.kermit.Logger
 import com.tarokanizer.common.SharedRes
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -121,6 +122,7 @@ fun AddGameScreen(
 
         Button(
             onClick = {
+                Logger.d("Game added $gameTitle, numberOfPlayers: ${playerNames.size}")
                 viewModel.addGame(
                     gameTitle = gameTitle.value,
                     playerNames = playerNames.map { it.value },

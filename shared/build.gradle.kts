@@ -57,6 +57,7 @@ kotlin {
                 implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("app.cash.sqldelight:primitive-adapters:$sqlDelightVersion")
                 api("dev.icerock.moko:resources-compose:0.24.0-beta-1")
+                implementation("co.touchlab:kermit:2.0.3")
             }
         }
         val androidMain by getting {
