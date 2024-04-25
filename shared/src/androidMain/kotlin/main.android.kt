@@ -1,12 +1,11 @@
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.tarokanizer.Database
 
-@Composable fun MainView() = App(appModule = AppModule(context = LocalContext.current.applicationContext))
+@Composable fun MainView() = App()
 
 actual class DriverFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {
