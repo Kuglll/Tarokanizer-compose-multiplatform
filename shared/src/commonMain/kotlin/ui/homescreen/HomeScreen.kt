@@ -1,7 +1,6 @@
 package ui.homescreen
 
 import AddGameScreenRoute
-import AppModule
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,35 +35,26 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import data.Game
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
+import org.koin.compose.koinInject
 import ui.gamedetails.GameDetailsScreenRoute
 import ui.shared.TarokanizerAlertDialog
 
-data class HomeScreenRoute(val appModule: AppModule) : Screen {
+object HomeScreenRoute : Screen {
 
     @Composable
     override fun Content() {
-        HomeScreen(appModule)
+        HomeScreen()
     }
 
 }
 
 @Composable
 fun HomeScreen(
-    appModule: AppModule,
+    viewModel: HomeScreenViewModel = koinInject(),
 ) {
-    val viewModel = getViewModel(
-        key = "home-screen",
-        factory = viewModelFactory {
-            HomeScreenViewModel(appModule.gameDataSource)
-        }
-    )
-
     val state by viewModel.state.collectAsState()
 
     HomeScreenContent(
-        appModule = appModule,
         games = state.games,
         onDeleteGame = viewModel::deleteGame
     )
@@ -72,7 +62,6 @@ fun HomeScreen(
 
 @Composable
 private fun HomeScreenContent(
-    appModule: AppModule,
     games: List<Game>,
     onDeleteGame: (String) -> Unit,
 ) {
@@ -82,7 +71,7 @@ private fun HomeScreenContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navigator.push(AddGameScreenRoute(appModule))
+                    navigator.push(AddGameScreenRoute)
                 },
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -121,7 +110,7 @@ private fun HomeScreenContent(
                         onDeleteGame(id)
                     },
                     onGameClicked = { id ->
-                        navigator.push(GameDetailsScreenRoute(appModule, id))
+                        navigator.push(GameDetailsScreenRoute(id))
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))

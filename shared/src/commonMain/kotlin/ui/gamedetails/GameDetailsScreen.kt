@@ -1,6 +1,5 @@
 package ui.gamedetails
 
-import AppModule
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -47,20 +46,18 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import data.Player
 import data.Round
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 import ui.addround.AddRoundScreenRoute
 import ui.shared.getScreenWidth
 
 data class GameDetailsScreenRoute(
-    val appModule: AppModule,
     val gameId: String,
 ) : Screen {
 
     @Composable
     override fun Content() {
         GameDetailsScreen(
-            appModule = appModule,
             gameId = gameId,
         )
     }
@@ -69,17 +66,10 @@ data class GameDetailsScreenRoute(
 
 @Composable
 fun GameDetailsScreen(
-    appModule: AppModule,
     gameId: String,
+    viewModel: GameDetailsViewModel = koinInject(parameters = { parametersOf(gameId) }),
 ) {
     val navigator = LocalNavigator.currentOrThrow
-
-    val viewModel = getViewModel(
-        key = "game-details",
-        factory = viewModelFactory {
-            GameDetailsViewModel(appModule.gameDataSource, gameId)
-        }
-    )
 
     val state by viewModel.state.collectAsState()
 
@@ -89,7 +79,7 @@ fun GameDetailsScreen(
         rounds = state.rounds,
         sums = state.sums,
         onAddRoundClicked = {
-            navigator.push(AddRoundScreenRoute(appModule, gameId))
+            navigator.push(AddRoundScreenRoute(gameId))
         }
     )
 }
