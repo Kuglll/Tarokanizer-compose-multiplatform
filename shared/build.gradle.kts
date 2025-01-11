@@ -51,13 +51,26 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                // Voyage
                 val voyagerVersion = "1.0.0"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
+                // SqlDelight
                 implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("app.cash.sqldelight:primitive-adapters:$sqlDelightVersion")
+
+                // Moko resources
                 api("dev.icerock.moko:resources-compose:0.24.0-beta-1")
+
+                // Kermit
                 implementation("co.touchlab:kermit:2.0.3")
+
+                //Koin
+                implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.6"))
+                implementation("io.insert-koin:koin-core")
+                implementation("io.insert-koin:koin-compose")
             }
         }
         val androidMain by getting {
@@ -66,6 +79,7 @@ kotlin {
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.9.0")
                 implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
+                implementation("io.insert-koin:koin-android")
             }
         }
         val iosX64Main by getting

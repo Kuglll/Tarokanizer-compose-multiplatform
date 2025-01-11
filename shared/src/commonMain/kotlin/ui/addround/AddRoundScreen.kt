@@ -1,6 +1,5 @@
 package ui.addround
 
-import AppModule
 import TarokanizerTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,18 +30,16 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import data.Player
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 
 data class AddRoundScreenRoute(
-    val appModule: AppModule,
     val gameId: String,
 ) : Screen {
 
     @Composable
     override fun Content() {
         AddRoundScreen(
-            appModule = appModule,
             gameId = gameId,
         )
     }
@@ -51,18 +48,11 @@ data class AddRoundScreenRoute(
 
 @Composable
 fun AddRoundScreen(
-    appModule: AppModule,
     gameId: String,
+    viewModel: AddRoundViewModel = koinInject(parameters = { parametersOf(gameId) }),
 ) {
 
     val navigator = LocalNavigator.currentOrThrow
-
-    val viewModel = getViewModel(
-        key = "add-round",
-        factory = viewModelFactory {
-            AddRoundViewModel(appModule.gameDataSource, gameId)
-        }
-    )
 
     val state by viewModel.state.collectAsState()
 
@@ -131,7 +121,7 @@ private fun AddRoundScreenContent(
             onClick = {
                 onStoreRoundClicked(
                     playerPoints.map {
-                        if(it.value.isEmpty()){
+                        if (it.value.isEmpty()) {
                             0
                         } else {
                             it.value.toInt() //TODO: Somehow prevent storing floats and doubles

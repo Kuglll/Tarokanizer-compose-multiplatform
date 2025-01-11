@@ -34,26 +34,21 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import co.touchlab.kermit.Logger
 import com.tarokanizer.common.SharedRes
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
+import org.koin.compose.koinInject
 import ui.addgame.AddGameViewModel
 
-data class AddGameScreenRoute(
-    val appModule: AppModule,
-) : Screen {
+object AddGameScreenRoute : Screen {
 
     @Composable
     override fun Content() {
-        AddGameScreen(
-            appModule = appModule,
-        )
+        AddGameScreen()
     }
 }
 
 @Composable
 fun AddGameScreen(
-    appModule: AppModule,
+    viewModel: AddGameViewModel = koinInject(),
 ) {
     val isNumberOfPlayersSelectionVisible = remember { mutableStateOf(false) }
     val gameTitle = remember { mutableStateOf("") }
@@ -62,13 +57,6 @@ fun AddGameScreen(
     val numberOfPlayersSelected = remember { mutableStateOf(playerNames.size) }
 
     val scrollState = rememberScrollState()
-
-    val viewModel = getViewModel(
-        key = "add-game-screen",
-        factory = viewModelFactory {
-            AddGameViewModel(appModule.gameDataSource)
-        }
-    )
 
     val navigator = LocalNavigator.currentOrThrow
 
